@@ -1,3 +1,4 @@
+package kwic;
 
 public class KWIC {
 
