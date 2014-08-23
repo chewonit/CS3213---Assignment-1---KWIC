@@ -10,13 +10,13 @@ import java.util.Vector;
  */
 public class Line {
 
-	int id;
+	private int id;
 
 	/** Boolean bit to mark that line has been filtered out */
-	boolean isFiltered = false;
+	private boolean isFiltered = false;
 
 	/** Vector to hold all words in the line */
-	Vector<String> words;
+	private Vector<String> words;
 
 	/**
 	 * Create a Line object that will hold all the words in a particular line.
@@ -29,7 +29,7 @@ public class Line {
 		assert(id >= 0 && words.size() > 0);
 
 		this.id = id;
-		this.words = words;
+		this.words = new Vector<String>(words);
 	}
 
 	/**
@@ -80,6 +80,15 @@ public class Line {
 	 */
 	public void setFiltered(boolean isFiltered) {
 		this.isFiltered = isFiltered;
+	}
+	
+	/**
+	 * Returns the ID of this Line.
+	 * 
+	 * @return the ID of this Line.
+	 */
+	public int getId() {
+		return id;
 	}
 
 	@Override

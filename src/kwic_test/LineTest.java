@@ -151,6 +151,19 @@ public class LineTest {
 	}
 	
 	@Test
+	public void testGetId() {
+		Vector<String> words = new Vector<String>();
+		words.add("Hello");
+		words.add("World");
+
+		Line line = new Line(1, words);
+		assertEquals(1, line.getId());
+
+		line = new Line(321, words);
+		assertEquals(321, line.getId());
+	}
+	
+	@Test
 	public void testToString() {
 		Vector<String> words = new Vector<String>();
 		words.add("Hello");
