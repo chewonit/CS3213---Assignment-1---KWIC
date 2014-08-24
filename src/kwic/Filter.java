@@ -36,6 +36,14 @@ public class Filter {
 	}
 	
 	/**
+	 * Clear ignored list
+	 * @param inputWord
+	 */
+	public void clearFilters(){
+		ignoredWords.clear();
+	}
+	
+	/**
 	 * Check if a word is in the ignored list
 	 * @param inputWord
 	 * @return result of whether the word is in ignored list
