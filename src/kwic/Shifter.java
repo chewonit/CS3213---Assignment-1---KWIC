@@ -10,13 +10,13 @@ import java.util.Vector;
  */
 
 public class Shifter {
-	public static Line shiftWord(Line inputLine){
+	public static Vector<String> shiftWord(Vector<String> inputVectorStrings){
 		Vector<String> shiftedVector = new Vector<String>();
-		for(int i = 1; i < inputLine.size(); i++){
-			shiftedVector.add(inputLine.getWord(i));
+		for(int i = 1; i < inputVectorStrings.size(); i++){
+			shiftedVector.add(inputVectorStrings.get(i));
 		}
-		shiftedVector.add(inputLine.getFirstWord());
+		shiftedVector.add(inputVectorStrings.firstElement());
 		
-		return new Line(inputLine.getId(), shiftedVector);
+		return shiftedVector;
 	}
 }
