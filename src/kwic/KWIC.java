@@ -13,12 +13,15 @@ import kwic_gui.KWIC_GUI;
 public class KWIC {
 	
 	private Processor processor;
+	private Output output;
 	
 	public KWIC() {
 		processor = new Processor();
+		output = new Output();
 	}
 	
 	public Vector<Line> process(String input) {
+		processor.process(input);
 		return new Vector<Line>();
 	}
 	
