@@ -41,6 +41,7 @@ public class Processor {
 				Line newLine = null;
 				if(isFirstWord){
 					newLine = this.createLine(shiftedWords);
+					isFirstWord = false;
 				} else {
 					newLine = this.createShiftedLine(shiftedWords);
 				}

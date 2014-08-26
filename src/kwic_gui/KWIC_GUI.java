@@ -95,16 +95,32 @@ public class KWIC_GUI extends JFrame {
 		updateDisplayList(listModel, lines);
 	}
 	
+	private void deleteLine(JButton btn, DefaultListModel<Line> listModel, JList<Line> list) {
+		Line line = list.getSelectedValue();
+		toggleButtonEnabled(btn);
+
+		Vector<Line> lines = kwic.removeLine(line.getId());
+
+		toggleButtonEnabled(btn);
+		updateDisplayList(listModel, lines);
+	}
+	
 	private void addNewFilter(JButton btn, DefaultListModel<String> listModel) {
-		String input = textFieldFilter.getText();
+		String filter = textFieldFilter.getText();
 		clearTextField(textFieldFilter);
 		toggleButtonEnabled(btn);
 
-		Vector<String> filters = kwic.addFilter(input);
+		Vector<String> filters = kwic.addFilter(filter);
 		
-		for (int i = 0; i < Math.random()*100; i++) {
-			filters.add("filter" + i);
-		}
+		toggleButtonEnabled(btn);
+		updateFilterList(listModel, filters);
+	}
+	
+	private void deleteFilter(JButton btn, DefaultListModel<String> listModel, JList<String> list) {
+		String filter = list.getSelectedValue();
+		toggleButtonEnabled(btn);
+
+		Vector<String> filters = kwic.removeFilter(filter);
 		
 		toggleButtonEnabled(btn);
 		updateFilterList(listModel, filters);
@@ -153,7 +169,7 @@ public class KWIC_GUI extends JFrame {
 
 		final JButton btnDeleteLines = new JButton("Delete selected lines");
 		final JButton btnDeleteFilters = new JButton("Delete selected filters");
-
+		
 		btnAddLine.setEnabled(false);
 		btnAddFilter.setEnabled(false);
 		btnDeleteLines.setEnabled(false);
@@ -237,10 +253,7 @@ public class KWIC_GUI extends JFrame {
 
 		btnDeleteLines.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(list.getSelectedValue());
-				System.out.println(list.getSelectedIndex());
-
-				// updateDisplayList(listModel);
+				deleteLine(btnDeleteLines, listModel, list);
 			}
 		});
 
@@ -265,6 +278,12 @@ public class KWIC_GUI extends JFrame {
 		textFieldFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addNewFilter(btnAddFilter, listModelFilter);
+			}
+		});
+		
+		btnDeleteFilters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteFilter(btnDeleteFilters, listModelFilter, listFilter);
 			}
 		});
 

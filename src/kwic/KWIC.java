@@ -16,11 +16,13 @@ public class KWIC {
 	private Processor processor;
 	private Output output;
 	private Filter filter;
+	private Storage storage;
 	
 	public KWIC() {
 		processor = new Processor();
 		output = new Output();
 		filter = Filter.getInstance();
+		storage = Storage.getInstance();
 	}
 	
 	public Vector<Line> process(String input) {
@@ -32,9 +34,19 @@ public class KWIC {
 		return new Vector<Line>();
 	}
 	
+	public Vector<Line> removeLine(int lineId) {
+		storage.removeLineById(lineId);
+		return output.output();
+	}
+	
 	public Vector<String> addFilter(String filter) {
 		this.filter.addFilter(filter);
-		return new Vector<String>();
+		return this.filter.getAllFilters();
+	}
+	
+	public Vector<String> removeFilter(String filter) {
+		this.filter.removeFilter(filter);
+		return this.filter.getAllFilters();
 	}
 
 	public static void main(String[] args) {
