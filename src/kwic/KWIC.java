@@ -1,6 +1,5 @@
 package kwic;
 
-import java.awt.image.FilteredImageSource;
 import java.util.Vector;
 
 import kwic_gui.KWIC_GUI;
@@ -17,16 +16,19 @@ public class KWIC {
 	private Output output;
 	private Filter filter;
 	private Storage storage;
+	private Sorter sorter;
 	
 	public KWIC() {
 		processor = new Processor();
 		output = new Output();
+		sorter = new Sorter();
 		filter = Filter.getInstance();
 		storage = Storage.getInstance();
 	}
 	
 	public Vector<Line> process(String input) {
 		processor.process(input);
+		sorter.sort();
 		return output.output();
 	}
 	
@@ -36,6 +38,7 @@ public class KWIC {
 	
 	public Vector<Line> removeLine(int lineId) {
 		storage.removeLineById(lineId);
+		sorter.sort();
 		return output.output();
 	}
 	
