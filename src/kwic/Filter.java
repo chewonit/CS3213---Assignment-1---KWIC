@@ -44,6 +44,14 @@ public class Filter {
 	}
 	
 	/**
+	 * Get all filters
+	 * 		
+	 */
+	public Vector<String> getAllFilters(){
+		return new Vector<String>(ignoredWords.values());
+	}
+	
+	/**
 	 * Check if a word is in the ignored list
 	 * @param inputWord
 	 * @return result of whether the word is in ignored list
