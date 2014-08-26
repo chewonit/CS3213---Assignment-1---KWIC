@@ -15,15 +15,12 @@ public class Output {
 		storage = Storage.getInstance();
 	}
 	
-	public Vector<String> output(){
-		Vector<String> formattedOutput = new Vector<String>();
+	public Vector<Line> output(){
+		Vector<Line> lines = new Vector<Line>();
 		for(int i = 0; i < storage.size(); i++){
 			Line retrievedLine = storage.getLine(i);
-			if(retrievedLine.size() > 0){
-				String retrievedString = retrievedLine.toString();
-				formattedOutput.add(retrievedString);
-			}
+			lines.add(retrievedLine);
 		}
-		return formattedOutput;
+		return lines;
 	}
 }
