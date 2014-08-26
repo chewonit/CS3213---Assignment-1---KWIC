@@ -2,6 +2,12 @@ package kwic;
 
 import java.util.Comparator;
 
+/**
+ * This class introduces a comparator to aid with the sorting.
+ * 
+ * @author Darry Chew (A0097797Y)
+ *
+ */
 public class Sorter {
 	
 	private Storage storage;

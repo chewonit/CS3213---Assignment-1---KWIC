@@ -10,6 +10,10 @@ import kwic.LineCreator;
 
 import org.junit.Test;
 
+/**
+ * @author Darry Chew (A0097797Y)
+ *
+ */
 public class LineCreatorTest {
 
 	@Test

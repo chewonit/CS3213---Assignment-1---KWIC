@@ -5,7 +5,7 @@ import java.util.Vector;
 /**
  * Line holds all the words in a particular line.
  * 
- * @author A0097797Y
+ * @author Darry Chew (A0097797Y)
  *
  */
 public class Line {

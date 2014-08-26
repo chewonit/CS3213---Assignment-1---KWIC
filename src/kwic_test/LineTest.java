@@ -12,7 +12,7 @@ import org.junit.Test;
 /**
  * Unit Test for the Line Class.
  * 
- * @author A0097797Y
+ * @author Darry Chew (A0097797Y)
  *
  */
 public class LineTest {

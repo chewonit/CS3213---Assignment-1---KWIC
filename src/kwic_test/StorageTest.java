@@ -14,6 +14,12 @@ import kwic.Storage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Storage Test.
+ * 
+ * @author Darry Chew (A0097797Y)
+ *
+ */
 public class StorageTest {
 
 	private static Storage storage;

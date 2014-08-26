@@ -9,7 +9,7 @@ import java.util.Vector;
  * as Shifted lines will bear the same line ID as its
  * original line.
  * 
- * @author A0097797Y
+ * @author Darry Chew (A0097797Y)
  *
  */
 public class LineCreator {
