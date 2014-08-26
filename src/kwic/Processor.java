@@ -33,8 +33,9 @@ public class Processor {
 	
 	private void processWord(Vector<String> words){
 		boolean isFirstWord = true;
+		Vector<String> shiftedWords = words;
 		for(int i=0; i<words.size(); i++){
-			Vector<String> shiftedWords = this.shiftWord(words);
+			shiftedWords = this.shiftWord(shiftedWords);
 			boolean isFilteredWord = this.isWordFiltered(shiftedWords.firstElement());
 			if(!isFilteredWord){
 				Line newLine = null;
