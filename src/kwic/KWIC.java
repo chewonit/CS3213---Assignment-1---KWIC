@@ -2,6 +2,7 @@ package kwic;
 
 import java.util.Vector;
 
+import javafx.util.Pair;
 import kwic_gui.KWIC_GUI;
 
 /**
@@ -42,14 +43,20 @@ public class KWIC {
 		return output.output();
 	}
 	
-	public Vector<String> addFilter(String filter) {
+	public Pair<Vector<String>, Vector<Line>> addFilter(String filter) {
 		this.filter.addFilter(filter);
-		return this.filter.getAllFilters();
+		sorter.sort();
+		Pair<Vector<String>, Vector<Line>> filtersAndOutput = 
+				new Pair<Vector<String>, Vector<Line>>(this.filter.getAllFilters(), output.output());
+		return filtersAndOutput;
 	}
 	
-	public Vector<String> removeFilter(String filter) {
+	public Pair<Vector<String>, Vector<Line>> removeFilter(String filter) {
 		this.filter.removeFilter(filter);
-		return this.filter.getAllFilters();
+		sorter.sort();
+		Pair<Vector<String>, Vector<Line>> filtersAndOutput = 
+				new Pair<Vector<String>, Vector<Line>>(this.filter.getAllFilters(), output.output());
+		return filtersAndOutput;
 	}
 
 	public static void main(String[] args) {
