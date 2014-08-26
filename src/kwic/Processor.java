@@ -22,19 +22,33 @@ public class Processor {
 	
 	public void process(String inputString){
 		Vector<String> words = this.breakString(inputString);
-		Vector<String> shiftedWords = this.shiftWord(words);
-		
-		boolean isFilteredWord = this.isWordFiltered(shiftedWords.firstElement());
-		
-		if(!isFilteredWord){
-			Line newLine = this.createLine(shiftedWords);
-			this.addToStorage(newLine);
-		}
+		this.processWord(words);
 	}
 	
 	public void process(Vector<String> inputStrings){
 		for(int i = 0; i < inputStrings.size(); i++){
 			this.process(inputStrings.get(i));
+		}
+	}
+	
+	private void processWord(Vector<String> words){
+		boolean isFirstWord = true;
+		Vector<String> shiftedWords = words;
+		for(int i=0; i<words.size(); i++){
+			shiftedWords = this.shiftWord(shiftedWords);
+			boolean isFilteredWord = this.isWordFiltered(shiftedWords.firstElement());
+			if(!isFilteredWord){
+				Line newLine = null;
+				if(isFirstWord){
+					newLine = this.createLine(shiftedWords);
+				} else {
+					newLine = this.createShiftedLine(shiftedWords);
+				}
+				
+				if(newLine != null){
+					this.addToStorage(newLine);
+				}
+			}
 		}
 	}
 	
@@ -48,7 +62,12 @@ public class Processor {
 	}
 	
 	private Line createLine(Vector<String> inputVectorStrings){
-		Line newLine = new Line(storage.size(), inputVectorStrings);
+		Line newLine = LineCreator.createLine(inputVectorStrings);
+		return newLine;
+	}
+	
+	private Line createShiftedLine(Vector<String> inputVectorStrings){
+		Line newLine = LineCreator.createedShiftedLine(inputVectorStrings);
 		return newLine;
 	}
 	
