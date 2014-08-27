@@ -71,6 +71,19 @@ public class Storage {
 			}
 		}
 	}
+
+	/**
+	 * Remove a single Line by index.
+	 * 
+	 * @param index to identify Line to be removed.
+	 * @return
+	 */
+	public Line removeLineByIndex(int index) {
+		if ( index < 0 || index >= data.size() ) {
+			throw new IndexOutOfBoundsException();
+		}
+		return data.remove(index);
+	}
 	
 	/**
 	 * Get the size of the Storage.
