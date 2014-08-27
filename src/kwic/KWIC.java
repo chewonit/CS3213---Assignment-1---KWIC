@@ -45,6 +45,7 @@ public class KWIC {
 	
 	public Pair<Vector<String>, Vector<Line>> addFilter(String filter) {
 		this.filter.addFilter(filter);
+		processor.reprocess();
 		sorter.sort();
 		Pair<Vector<String>, Vector<Line>> filtersAndOutput = 
 				new Pair<Vector<String>, Vector<Line>>(this.filter.getAllFilters(), output.output());
