@@ -24,6 +24,7 @@ public class Filter {
 	 * @param inputWord
 	 */
 	public void addFilter(String inputWord){
+		inputWord = inputWord.toLowerCase();
 		ignoredWords.put(inputWord, inputWord);
 	}
 	
@@ -32,6 +33,7 @@ public class Filter {
 	 * @param inputWord
 	 */
 	public void removeFilter(String inputWord){
+		inputWord = inputWord.toLowerCase();
 		ignoredWords.remove(inputWord);
 	}
 	
@@ -57,6 +59,7 @@ public class Filter {
 	 * @return result of whether the word is in ignored list
 	 */
 	public boolean isWordFiltered(String inputWord){
+		inputWord = inputWord.toLowerCase();
 		if(inputWord != null){
 			return ignoredWords.containsKey(inputWord);
 		} else {
