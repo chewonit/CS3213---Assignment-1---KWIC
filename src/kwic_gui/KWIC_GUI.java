@@ -120,6 +120,17 @@ public class KWIC_GUI extends JFrame {
 		updateFilterList(listModelFilter, filtersAndOutput.getKey());
 		updateDisplayList(listModel, filtersAndOutput.getValue());
 	}
+	
+	private void deleteFilter(JButton btn, DefaultListModel<String> listModelFilter, JList<String> list, DefaultListModel<Line> listModel) {
+		String filter = list.getSelectedValue();
+		toggleButtonEnabled(btn);
+
+		Pair<Vector<String>, Vector<Line>> filtersAndOutput = kwic.removeFilter(filter);
+
+		toggleButtonEnabled(btn);
+		updateFilterList(listModelFilter, filtersAndOutput.getKey());
+		updateDisplayList(listModel, filtersAndOutput.getValue());
+	}
 
 	/**
 	 * Create the frame.
@@ -162,11 +173,13 @@ public class KWIC_GUI extends JFrame {
 		final JButton btnAddLine = new JButton("Add");
 		final JButton btnAddFilter = new JButton("Add");
 		final JButton btnDeleteLines = new JButton("Delete selected lines");
+		final JButton btnDeleteFilters = new JButton("Delete selected filters");
 		
 		btnAddLine.setEnabled(false);
 		btnAddFilter.setEnabled(false);
 		btnDeleteLines.setEnabled(false);
-
+		btnDeleteFilters.setEnabled(false);
+		
 		scrollPane.setViewportView(list);
 		list.setModel(listModel);
 		list.addListSelectionListener(new ListSelectionListener() {
@@ -174,7 +187,6 @@ public class KWIC_GUI extends JFrame {
 			public void valueChanged(ListSelectionEvent arg0) {
 				if (!arg0.getValueIsAdjusting()) {
 					if (list.getSelectedValue() != null) {
-						System.out.println(list.getSelectedValue().toString());
 						btnDeleteLines.setEnabled(true);
 					} else if (list.getSelectedValue() == null) {
 						btnDeleteLines.setEnabled(false);
@@ -185,6 +197,18 @@ public class KWIC_GUI extends JFrame {
 		
 		scrollPane_1.setViewportView(listFilter);
 		listFilter.setModel(listModelFilter);
+		listFilter.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				if (!arg0.getValueIsAdjusting()) {
+					if (listFilter.getSelectedValue() != null) {
+						btnDeleteFilters.setEnabled(true);
+					} else if (listFilter.getSelectedValue() == null) {
+						btnDeleteFilters.setEnabled(false);
+					}
+				}
+			}
+		});
 
 		textField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -247,7 +271,13 @@ public class KWIC_GUI extends JFrame {
 				addNewLine(btnAddLine, listModel);
 			}
 		});
-
+		
+		btnDeleteFilters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				deleteFilter(btnDeleteFilters, listModelFilter, listFilter, listModel);
+			}
+		});
+		
 		btnAddFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addNewFilter(btnAddFilter, listModelFilter, listModel);
@@ -266,7 +296,7 @@ public class KWIC_GUI extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblKwic, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 772, Short.MAX_VALUE)
+						.addComponent(lblKwic, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -276,14 +306,19 @@ public class KWIC_GUI extends JFrame {
 									.addComponent(btnAddLine))
 								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 421, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnDeleteLines, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
-							.addGap(94)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(textFieldFilter, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+									.addGap(94)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+										.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+											.addComponent(textFieldFilter, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(btnAddFilter, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblFilters, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnAddFilter, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-								.addComponent(scrollPane_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-								.addComponent(lblFilters, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))))
+									.addComponent(btnDeleteFilters, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -302,12 +337,13 @@ public class KWIC_GUI extends JFrame {
 						.addComponent(textFieldFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnAddFilter))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 322, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnDeleteLines))
-						.addComponent(scrollPane_1))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPane_1)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnDeleteLines)
+						.addComponent(btnDeleteFilters))
 					.addContainerGap(44, Short.MAX_VALUE))
 		);
 		

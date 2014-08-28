@@ -52,6 +52,15 @@ public class KWIC {
 		return filtersAndOutput;
 	}
 
+	public Pair<Vector<String>, Vector<Line>> removeFilter(String filter) {
+		this.filter.removeFilter(filter);
+		processor.reprocess();
+		sorter.sort();
+		Pair<Vector<String>, Vector<Line>> filtersAndOutput = 
+				new Pair<Vector<String>, Vector<Line>>(this.filter.getAllFilters(), output.output());
+		return filtersAndOutput;
+	}
+
 	public static void main(String[] args) {
 		
 		KWIC kwic = new KWIC();
