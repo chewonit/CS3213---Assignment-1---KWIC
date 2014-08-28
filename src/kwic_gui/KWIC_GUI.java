@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.peer.TextFieldPeer;
 import java.util.Vector;
 
 import javafx.util.Pair;
@@ -29,7 +30,10 @@ import javax.swing.event.ListSelectionListener;
 
 import kwic.KWIC;
 import kwic.Line;
+
 import java.awt.Component;
+import java.io.IOException;
+
 import javax.swing.Box;
 
 public class KWIC_GUI extends JFrame {
@@ -40,6 +44,7 @@ public class KWIC_GUI extends JFrame {
 
 	private static KWIC kwic;
 	private JTextField textFieldFilter;
+	private JTextField textFieldFile;
 
 	/**
 	 * Launch the application.
@@ -131,13 +136,30 @@ public class KWIC_GUI extends JFrame {
 		updateFilterList(listModelFilter, filtersAndOutput.getKey());
 		updateDisplayList(listModel, filtersAndOutput.getValue());
 	}
+	
+	private void processFile(JButton btn, DefaultListModel<Line> listModel) {
+		String path = textFieldFile.getText();
+		clearTextField(textFieldFile);
+		toggleButtonEnabled(btn);
+
+		Vector<Line> lines = new Vector<Line>();
+		try {
+			lines = kwic.processFile(path);
+		} catch (IOException e) {
+			textFieldFile.setText("Error encountered when opening file.");
+			return;
+		}
+
+		toggleButtonEnabled(btn);
+		updateDisplayList(listModel, lines);
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public KWIC_GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 640);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -149,12 +171,17 @@ public class KWIC_GUI extends JFrame {
 		JLabel lblFilters = new JLabel("Filters");
 		lblFilters.setHorizontalAlignment(SwingConstants.CENTER);
 
+		JLabel lblInputFileOf = new JLabel("Input File of Lines:");
+		
 		textField = new JTextField();
 		textField.setColumns(10);
 		
 		textFieldFilter = new JTextField();
 		textFieldFilter.setColumns(10);
-
+		
+		textFieldFile = new JTextField();
+		textFieldFile.setColumns(10);
+		
 		lblNewLabel = new JLabel("Lines");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -174,11 +201,13 @@ public class KWIC_GUI extends JFrame {
 		final JButton btnAddFilter = new JButton("Add");
 		final JButton btnDeleteLines = new JButton("Delete selected lines");
 		final JButton btnDeleteFilters = new JButton("Delete selected filters");
+		final JButton btnProcessFile = new JButton("Process File");
 		
 		btnAddLine.setEnabled(false);
 		btnAddFilter.setEnabled(false);
 		btnDeleteLines.setEnabled(false);
 		btnDeleteFilters.setEnabled(false);
+		btnProcessFile.setEnabled(false);
 		
 		scrollPane.setViewportView(list);
 		list.setModel(listModel);
@@ -212,18 +241,18 @@ public class KWIC_GUI extends JFrame {
 
 		textField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
 			public void removeUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
 			public void insertUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
-			public void updateAddBtnStatus() {
+			public void updateBtnStatus() {
 				if (textField.getText().length() <= 0) {
 					btnAddLine.setEnabled(false);
 				} else if (textField.getText().length() > 0) {
@@ -234,22 +263,44 @@ public class KWIC_GUI extends JFrame {
 		
 		textFieldFilter.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
 			public void removeUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
 			public void insertUpdate(DocumentEvent e) {
-				updateAddBtnStatus();
+				updateBtnStatus();
 			}
 
-			public void updateAddBtnStatus() {
+			public void updateBtnStatus() {
 				if (textFieldFilter.getText().length() <= 0) {
 					btnAddFilter.setEnabled(false);
 				} else if (textFieldFilter.getText().length() > 0) {
 					btnAddFilter.setEnabled(true);
+				}
+			}
+		});
+		
+		textFieldFile.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				updateBtnStatus();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				updateBtnStatus();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				updateBtnStatus();
+			}
+
+			public void updateBtnStatus() {
+				if (textFieldFile.getText().length() <= 0) {
+					btnProcessFile.setEnabled(false);
+				} else if (textFieldFile.getText().length() > 0) {
+					btnProcessFile.setEnabled(true);
 				}
 			}
 		});
@@ -289,6 +340,18 @@ public class KWIC_GUI extends JFrame {
 				addNewFilter(btnAddFilter, listModelFilter, listModel);
 			}
 		});
+		
+		btnProcessFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				processFile(btnProcessFile, listModel);
+			}
+		});
+		
+		textFieldFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				processFile(btnProcessFile, listModel);
+			}
+		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -308,17 +371,23 @@ public class KWIC_GUI extends JFrame {
 								.addComponent(btnDeleteLines, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnDeleteFilters, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
+								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 									.addGap(94)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+										.addComponent(scrollPane_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
 										.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 											.addComponent(textFieldFilter, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(btnAddFilter, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-										.addComponent(lblFilters, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnDeleteFilters, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)))))
+										.addComponent(lblFilters, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblInputFileOf)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(textFieldFile, GroupLayout.PREFERRED_SIZE, 437, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnProcessFile, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -344,7 +413,12 @@ public class KWIC_GUI extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnDeleteLines)
 						.addComponent(btnDeleteFilters))
-					.addContainerGap(44, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textFieldFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblInputFileOf)
+						.addComponent(btnProcessFile))
+					.addGap(25))
 		);
 		
 		contentPane.setLayout(gl_contentPane);

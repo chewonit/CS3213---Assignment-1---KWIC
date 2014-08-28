@@ -1,5 +1,6 @@
 package kwic;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import javafx.util.Pair;
@@ -18,11 +19,13 @@ public class KWIC {
 	private Filter filter;
 	private Storage storage;
 	private Sorter sorter;
+	private FileIo fileIo;
 	
 	public KWIC() {
 		processor = new Processor();
 		output = new Output();
 		sorter = new Sorter();
+		fileIo = new FileIo();
 		filter = Filter.getInstance();
 		storage = Storage.getInstance();
 	}
@@ -33,8 +36,11 @@ public class KWIC {
 		return output.output();
 	}
 	
-	public Vector<Line> processFile(String input) {
-		return new Vector<Line>();
+	public Vector<Line> processFile(String path) throws IOException {
+		Vector<String> fileLines = fileIo.readFile(path);
+		processor.process(fileLines);
+		sorter.sort();
+		return output.output();
 	}
 	
 	public Vector<Line> removeLine(int lineId) {
