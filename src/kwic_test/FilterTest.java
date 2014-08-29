@@ -13,13 +13,13 @@ public class FilterTest {
 	@Test
 	public void testAddFilter() {
 		HashMap<String, String> ignoredWords = new HashMap<String, String>();
-		ignoredWords.put("Hello", "Hello");
-		ignoredWords.put("World", "World");
+		ignoredWords.put("hello", "hello");
+		ignoredWords.put("world", "world");
 		
 		Filter filter = Filter.getInstance();
 
-		filter.addFilter("Hello");
-		filter.addFilter("World");
+		filter.addFilter("hello");
+		filter.addFilter("world");
 		
 		Field field;
 		try {
@@ -38,16 +38,16 @@ public class FilterTest {
 	@Test
 	public void testRemoveFilter() {
 		HashMap<String, String> ignoredWords = new HashMap<String, String>();
-		ignoredWords.put("Hello", "Hello");
-		ignoredWords.put("World", "World");
-		ignoredWords.remove("Hello");
+		ignoredWords.put("hello", "hello");
+		ignoredWords.put("world", "world");
+		ignoredWords.remove("hello");
 		
 		Filter filter = Filter.getInstance();
 		filter.clearFilters();
 
-		filter.addFilter("Hello");
-		filter.addFilter("World");
-		filter.removeFilter("Hello");
+		filter.addFilter("hello");
+		filter.addFilter("world");
+		filter.removeFilter("hello");
 		
 		Field field;
 		try {
@@ -56,7 +56,7 @@ public class FilterTest {
 			
 			HashMap<String, String> value = (HashMap<String, String>) field.get(filter);
 
-			assertTrue(ignoredWords.equals(value));
+			assertEquals(ignoredWords, value);
 		} catch (Exception e) {
 			fail("Could not access private variable.");
 		}
